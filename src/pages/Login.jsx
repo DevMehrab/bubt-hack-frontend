@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { AuthContext } from "../../context/context.js";
 
 const Login = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,6 +21,9 @@ const Login = () => {
       .post("/auth/login", form)
       .then((response) => {
         console.log("Login successful:", response.data);
+        setUser(response.data.user);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+
         navigate("/resources");
       })
       .catch((error) => {

@@ -1,16 +1,37 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import Resources from "./pages/Resources";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import UploadPage from "./pages/UploadPage";
+import ProfilePage from "./pages/ProfilePage";
+import InventoryPage from "./pages/InventoryPage";
+import ConsumptionPage from "./pages/ConsumptionPage";
+import AuthProvider from "../providers/AuthProvider";
+
+import MainLayout from "../layouts/MainLayout";
+
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/resources" element={<Resources />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* PUBLIC ROUTES */}
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+
+          {/* PROTECTED LAYOUT ROUTES */}
+          <Route element={<MainLayout />}>
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/upload" element={<UploadPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/consumption" element={<ConsumptionPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
